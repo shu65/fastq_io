@@ -33,8 +33,8 @@
  *
  */
 
-#ifndef FASTA_IO_HPP_
-#define FASTA_IO_HPP_
+#ifndef FASTQ_IO_HPP_
+#define FASTQ_IO_HPP_
 
 #include <string>
 #include <vector>
@@ -48,4 +48,4 @@ int WriteRecode(std::ostream &ostream, const std::string &header,
 
 }
 
-#endif /* FASTA_IO_HPP_ */
+#endif /* FASTQ_IO_HPP_ */
