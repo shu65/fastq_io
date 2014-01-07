@@ -33,10 +33,10 @@
  *
  */
 
-#ifndef FASTA_IO_HPP_
-#define FASTA_IO_HPP_
+#ifndef FASTQ_IO_HPP_
+#define FASTQ_IO_HPP_
 
 #include "fastq_io/fastq_reader.h"
 #include "fastq_io/fastq_writer.h"
 
-#endif /* FASTA_IO_HPP_ */
+#endif /* FASTQ_IO_HPP_ */

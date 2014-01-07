@@ -8,3 +8,7 @@ Build and Run Test
     cd fastq_io/
     g++ src/fastq_io/fastq_*.cpp test/fastq_io/fastq_*.cpp -lgtest -lgtest_main -lpthread -o fastq_io_test
     ./fastq_io_test
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/shu65/fastq_io/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
