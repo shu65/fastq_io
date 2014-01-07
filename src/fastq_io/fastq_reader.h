@@ -1,7 +1,7 @@
 /*
- * fasta_io.hpp
+ * fastq_reader.h
  *
- *   Copyright (c) 2013, Shuji Suzuki
+ *   Copyright (c) 2014, Shuji Suzuki
  *   All rights reserved.
  *
  *   Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,44 @@
  *
  */
 
-#ifndef FASTA_IO_HPP_
-#define FASTA_IO_HPP_
+#ifndef FASTQ_READER_H_
+#define FASTQ_READER_H_
 
-#include <string>
-#include <vector>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 namespace fastq_io {
-int ReadRecode(std::istream &istream, std::string &header,
-		std::string &sequence, std::string &quality);
-int WriteRecode(std::ostream &ostream, const std::string &header,
-		const std::string &sequence, std::string &quality);
 
-}
+class FastqReader {
+public:
+	FastqReader();
+	virtual ~FastqReader();
 
-#endif /* FASTA_IO_HPP_ */
+	void Open(const char * filename) {
+		is_.open(filename);
+	}
+
+	void Close() {
+		is_.close();
+	}
+
+	operator void*() const {
+		return static_cast<void*>(is_);
+	}
+
+	bool IsEnd() const {
+		return is_.eof();
+	}
+
+	int Read(std::string &header, std::string &sequence, std::string &quality);
+
+private:
+	FastqReader(const FastqReader&);
+	FastqReader operator=(const FastqReader&);
+
+	std::ifstream is_;
+};
+
+} /* namespace fastq_io */
+#endif /* FASTQ_READER_H_ */

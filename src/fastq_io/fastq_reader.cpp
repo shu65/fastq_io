@@ -1,7 +1,7 @@
 /*
- * fasta_io.cpp
+ * fastq_reader.cpp
  *
- *   Copyright (c) 2013, Shuji Suzuki
+ *   Copyright (c) 2014, Shuji Suzuki
  *   All rights reserved.
  *
  *   Redistribution and use in source and binary forms, with or without
@@ -33,28 +33,36 @@
  *
  */
 
-#include "fastq_io.hpp"
-#include <string>
-#include <vector>
 #include <algorithm>
+#include "fastq_reader.h"
 
 using namespace std;
 
-int fastq_io::ReadRecode(std::istream &istream, std::string &header,
-		std::string &sequence, std::string &quality) {
+namespace fastq_io {
+
+FastqReader::FastqReader() {
+
+}
+
+FastqReader::~FastqReader() {
+
+}
+
+int FastqReader::Read(std::string &header, std::string &sequence,
+		std::string &quality) {
 	header.clear();
 	sequence.clear();
 	quality.clear();
 	string line;
 	size_t position;
 	bool bad_record = false;
-	if (!istream) {
+	if (!is_) {
 		return 1;
 	}
-	while (!istream.eof() && (line.length() == 0 || line.at(0) != '@')) {
-		std::getline(istream, line);
+	while (!is_.eof() && (line.length() == 0 || line.at(0) != '@')) {
+		std::getline(is_, line);
 	}
-	if (istream.eof()) {
+	if (is_.eof()) {
 		return 1;
 	}
 
@@ -67,7 +75,7 @@ int fastq_io::ReadRecode(std::istream &istream, std::string &header,
 	}
 
 	// set sequence
-	std::getline(istream, line);
+	std::getline(is_, line);
 	if (line.length() != 0) {
 		std::string::iterator left = std::find_if(line.begin(), line.end(),
 				std::not1(std::ptr_fun<int, int>(isspace)));
@@ -80,14 +88,14 @@ int fastq_io::ReadRecode(std::istream &istream, std::string &header,
 		bad_record = true;
 	}
 
-	std::getline(istream, line);
+	std::getline(is_, line);
 	position = line.find_first_not_of("+");
 	if (position == std::string::npos) {
 		bad_record = true;
 	}
 
 	// set quality
-	std::getline(istream, line);
+	std::getline(is_, line);
 	if (line.length() != 0) {
 		std::string::iterator left = std::find_if(line.begin(), line.end(),
 				std::not1(std::ptr_fun<int, int>(isspace)));
@@ -102,16 +110,4 @@ int fastq_io::ReadRecode(std::istream &istream, std::string &header,
 	return bad_record ? 1 : 0;
 }
 
-int fastq_io::WriteRecode(std::ostream &ostream, const std::string &header,
-		const std::string &sequence, std::string &quality) {
-	if (!ostream || sequence.length() != quality.length()) {
-		return 1;
-	}
-
-	ostream << "@" << header << endl;
-	ostream << sequence << endl;
-	ostream << "+" << header << endl;
-	ostream << quality << endl;
-	return 0;
-}
-
+} /* namespace fastq_io */
